@@ -9,35 +9,12 @@
 %should be injection-independent, enter 0 for "inj_dep." Corrections for
 %injection dependence are made based on Isenberg 2004.
 %
-%T is the sample temperature during the measurement. This is only used if
-%a correction is made for the FCA coefficient. If this is not desired,
-%enter an arbitrary value. 
-%
-%cutoff_inject is the injection level below which the data will be too
-%noisy to interpret later.
-%
-%cutoff_t is similar to the injection cutoff. Beyond this time, the data
-%has hit the noise floor.
-%
-%bin is used to smooth the data. This defines the number of values which
-%are averaged to produce the resulting curve.
-%
-%d is the thickness of the wafer in cm. 
-%
-%File outputs include: deltan (carrier density as function of time in
-%cm^-3), t (time vector which matches deltan, carrier, and datas), datas
-%(raw voltage data before it has been converted to a carrier density or
-%some form of that), carrier (-log(1-voltage/V0)), and V0 (the calculated
-%value at 100% absorption, corrected for voltage offset). 
-
-function [deltan,t,datas,carrier,V0]= FCA_process(filename1,filename2,FCA,inj_dep,T,cutoff_inject,cutoff_t,bin,d)
-
-%Reading the baseline file. This  measurement has been taken with the mono
+%T is the samplltage/V0)), and V0 (the calculated
+%value at 100% absorption, corrected for voltage offset).asurement has been taken with the mono
 %closed so that we are reading the "dark" voltage of the detector.
 fid=fopen(filename1);
 %extracting the baseline data
-info1b=textscan(fid,'%[^:] %c %s',3);
-info2b=textscan(fid,'%[^:] %c %f64',6);
+info1b=textscan(fid,'%[^:] %c %s'info2b=textscan(fid,'%[^:] %c %f64',6);
 info3b=textscan(fid,'%[^:] %c %s',11);
 %reading the data file into an array until the strong 'Data:' with x being
 %the time and y being the intensity
