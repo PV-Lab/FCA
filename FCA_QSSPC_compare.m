@@ -1,7 +1,7 @@
 %% Load the raw data and plot
 clear all; close all; 
 
-filename = '20150821_FCAData_bin25_5303_25C.mat'; 
+filename = 'C:\Users\Mallory\Documents\Lifetime spectroscopy\Experiments\PA-3 no T-stage\2015-08Aug-24-16-3281\20150824_FCAData_bin25_3281_25C.mat'; 
 %The stored variables are t, deltan, datas, carrier, V0, and lifetime. The
 %data has not been filtered before calculating lifetime. The data has been
 %binned according to the file label. 
@@ -21,7 +21,7 @@ xlabel('Time (s)');
 ylabel('Carrier density (cm^-^3)'); 
 
 %Read the QSSPC data
-QSSPC = xlsread('C:\Users\Mallory\Documents\Lifetime spectroscopy\Experiments\Fe contaminated\No T-stage experiment\AG Fe_60s_70LP','RawData','E6:G126');
+QSSPC = xlsread('C:\Users\Mallory\Documents\Lifetime spectroscopy\Experiments\PA-3 no T-stage\Sinton\PA-3 after FCA','RawData','E6:G126');
 lifetimeQSSPC = QSSPC(:,1);
 deltanQSSPC = QSSPC(:,3);
 
@@ -51,7 +51,7 @@ loglog(testData,lifetime_filt,'.');
 %% Plot Richter lifetime
 deltan_ideal = logspace(13,18,500);
 tau_intr = zeros(size(deltan_ideal));
-N_dop = 7.5e14; 
+N_dop = 5.7e15; 
 type = 'p';
 T = 25+273.15;
 
