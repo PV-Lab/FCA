@@ -1,7 +1,7 @@
 %% Load the raw data and plot
 clear all; close all; 
 
-filename = 'C:\Users\Mallory\Documents\Lifetime spectroscopy\Experiments\PA-3 no T-stage\2015-08Aug-24-16-3281\20150824_FCAData_bin25_3281_25C.mat'; 
+filename = 'C:\Users\Mallory\Documents\Lifetime spectroscopy\Experiments\PA-3 no T-stage\2015-08Aug-24-16-3281\20150825_FCAData_bin25_3281_injDepFCA_25C.mat'; 
 %The stored variables are t, deltan, datas, carrier, V0, and lifetime. The
 %data has not been filtered before calculating lifetime. The data has been
 %binned according to the file label. 
@@ -35,7 +35,7 @@ ylabel('Lifetime [s]');
 legend('QSSPC','FCA');
 
 %% Try a low-pass digital filter on the collected data
-[coeff1,coeff2] = butter(1,.02);
+[coeff1,coeff2] = butter(1,.2);
 
 testData = filtfilt(coeff1,coeff2,deltan); 
 
