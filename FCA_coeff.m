@@ -1,8 +1,11 @@
 function [delta_carr_rev]=FCA_coeff(delta_carr,T,carrier,d)
-%T should be in Kelvin. delta_carr is the calculated injection level in
-%cm^-3. This script corrects that injection level for temperature and high
-%injection. Raw is the value before conversion to carrier density. d is the
-%thickness of the wafer in cm. 
+%[delta_carr_rev] = FCA_coeff(delta_carr,T,carrier,d): This function
+%calculates a revised free carrier absorption cross-section based on a
+%publication by Isenberg in 2004. T is the sample temperature in Kelvin.
+%delta_carr is the initial calculated injection level in cm^-3. This script
+%corrects that injection level for temperature and high injection. Carrier
+%is the value before conversion to carrier density (-log(1-V/V0)). d is the
+%thickness of the wafer in cm.
 
 %This correction is taken from Isenberg, APL, 2004. This should be
 %validated across the temperature range. 
