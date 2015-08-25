@@ -1,8 +1,8 @@
 % This Matlab script reads the output files from a free-carrier absoprtion
 % measurement. The data is processed and save as raw data, carrier density,
 % and then lifetime. 
-% clear all
-% close all
+clear all
+close all
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % define parameters
@@ -43,33 +43,15 @@ plot(t,product);
 
 %Filter
 sampling = length(t)/(max(t)-min(t)); 
-cutoff = (1.7e7)/sampling/2; 
+cutoff = (1.667e7)/sampling/2; 
 [coeff1,coeff2] = butter(1,cutoff);
 product_filt = filtfilt(coeff1,coeff2,product); 
 
 hold all;
-plot(t,product_filt); 
+plot(t,product); 
 
-subplot(2,1,2);
-[m,n] = size(product_filt);
-dcdt = zeros(size(product_filt)); 
-for j = 3:(max(m,n)-2)
-    x = t(j-2:j+2);
-    y = product_filt(j-2:j+2);
-    X = [x',ones(5,1)];
-    fit = X\(y');
-    dcdt(j) = fit(1);
-end
-plot(t(3:end),dcdt(3:end)); 
+subplot(2,1,2); 
 
-%Find the maximum value from the filtered data and then take the average of 2 points on either side 
-max_index = find(product_filt==max(product_filt)); 
-max_values = product_filt(max_index-2:max_index+2); 
-max_avg = mean(max_values); 
-
-subplot(2,1,1); 
-hold all; 
-plot(t(max_index),max_avg,'o','MarkerSize',8); 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Calculate the lifetime

@@ -132,13 +132,13 @@ datas = (1/bin)*sum(reshape(datas,bin,[]),1);
 t=(1/bin)*sum(reshape(t,bin,[]),1);
 
 %Remove data for t<5ns (account for rise time of detector)
-ix=(t<5*10^-9);
-datas(ix)=[];
-t(ix)=[];
+% ix=(t<5*10^-9);
+% datas(ix)=[];
+% t(ix)=[];
 %Remove all negative values first
-ix=(datas<0);
-datas(ix)=[];
-t(ix)=[];
+% ix=(datas<0);
+% datas(ix)=[];
+% t(ix)=[];
 
 %Throw out data that has time >cutoff_t 
 ix=(t>cutoff_t);
