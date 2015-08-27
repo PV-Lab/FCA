@@ -7,11 +7,6 @@ laserpower = xlsread('C:\Users\Mallory\Documents\Lifetime spectroscopy\Experimen
 %column 1 = scan, column 6 = avg, column 7 = std
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Read the window temperature data
-temps = xlsread('C:\Users\Mallory\Documents\Lifetime spectroscopy\Experiments\July 7 2015\Experiment log.xlsx','Log files+T'); 
-%column 2 = scan, column 6 = window T
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Gather all the files from the current directory
 
 % read all files with the extension .txt
@@ -23,11 +18,8 @@ number=length(filenames);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Read the data from each file
-T_store = zeros(number,1); 
-product_store = zeros(number,1); 
 laserAvg_store = zeros(number,1); 
-laserStd_store = zeros(number,1); 
-windowT_store = zeros(number,1); 
+laserStd_store = zeros(number,1);  
 lambda = zeros(number,1); 
 
 figure; 

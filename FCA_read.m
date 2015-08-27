@@ -6,8 +6,8 @@ close all
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % define parameters
-bin=1; % binning resolution
-d=490*10^-4; % thickness of silicon wafer, cm
+bin=25; % binning resolution
+d=260*10^-4; % thickness of silicon wafer, cm
 % define the cut-off injection level. signal at low injection levels 
 % is very noisy
 cutoff_inject=1.0e13; %cm^-3
@@ -16,7 +16,7 @@ cutoff_t=1e-3; %s
 T = 25+273.15; %sample temperature in K
 FCA = 7.5e-18; %FCA cross-section to be used, cm^2. 7.5e-18 is the value determined by Sin Cheng's work.
 inj_dep = 0; %Is the FCA cross-section injection dependent? This will also perform a correction for temperature if measurements are not made at room-temperature.
-save_file='20150821_FCAData_bin1_5303_25C.mat'; %filename for .mat file with raw data for fitting
+save_file='20150827_FCAData_bin25_4625_25C.mat'; %filename for .mat file with raw data for fitting
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Read the data and do some initial processing
