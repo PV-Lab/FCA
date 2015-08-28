@@ -4,7 +4,8 @@ clear all;
 close all;
 
 d = 260e-4; %cm, sample thickness
-cutoff = 0.001; %filter design cutoff
+% cutoff = 0.001; %filter design cutoff
+cutoff = logspace(-4,-2,20); 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Read the laser power data
@@ -97,69 +98,74 @@ for i = 1:length(laserAvg_store)
     
     carrier = carrier_store{i};
     t = t_store{i}; 
+    for j = 1:length(cutoff)
+        %Let's filter the data for a better result
+        [coeff1,coeff2] = butter(1,cutoff(j));
+        carrier_filt = filtfilt(coeff1,coeff2,carrier); 
     
-    %Let's filter the data for a better result
-    [coeff1,coeff2] = butter(1,cutoff);
-    carrier_filt = filtfilt(coeff1,coeff2,carrier); 
+        %Find the maximum value of the data and then take the average of 2
+        %points on either side
+        max_index = find(carrier_filt == max(carrier_filt)); 
+        if max_index==1
+            max_values = carrier_filt(1:max_index+2); 
+        else
+            max_values = carrier_filt(max_index-2:max_index+2); 
+        end
+        max_avg = mean(max_values);
     
-    %Find the maximum value of the data and then take the average of 2
-    %points on either side
-    max_index = find(carrier_filt == max(carrier_filt)); 
-    max_values = carrier_filt(max_index-2:max_index+2); 
-    max_avg = mean(max_values);
+%         figure;
+%         plot(t,carrier);
+%         hold all;
+%         plot(t,carrier_filt);
+%         hold all;
+%         plot(t(max_index),max_avg,'o','MarkerSize',8); 
+%         xlabel('Time (s)'); 
+%         ylabel('-log(1-V/V_0)'); 
     
-    figure;
-    plot(t,carrier);
-    hold all;
-    plot(t,carrier_filt);
-    hold all;
-    plot(t(max_index),max_avg,'o','MarkerSize',8); 
-    xlabel('Time (s)'); 
-    ylabel('-log(1-V/V_0)'); 
-    
-    lhs_store(i) = max_avg/d; 
-    
-    %Get the right hand side of the equation - the carrier density
-    if filters_store(i)==1
-        T = NDfilters('NE05A',lambda(i)); 
-    elseif filters_store(i)==2
-        T = NDfilters('NE06A',lambda(i)); 
-    elseif filters_store(i)==3
-        T = NDfilters('NE10A',lambda(i)); 
-    elseif filters_store(i)==4
-        T = NDfilters('NE13A',lambda(i)); 
-    elseif filters_store(i)==5
-        T1 = NDfilters('NE05A',lambda(i)); 
-        T2 = NDfilters('NE06A',lambda(i));
-        T = T1*T2;
-    elseif filters_store(i)==6
-        T1 = NDfilters('NE06A',lambda(i)); 
-        T2 = NDfilters('NE10A',lambda(i));
-        T = T1*T2;
-    elseif filters_store(i)==7
-        T1 = NDfilters('NE06A',lambda(i)); 
-        T2 = NDfilters('NE13A',lambda(i));
-        T = T1*T2;
-    elseif filters_store(i)==0
-        T=1;
-    else
-        disp('Did not succeed at finding transmission');
-    end
-    
-    power_transmitted(i) = laserAvg_store(i)*T; %uJ
-    std_transmitted = laserStd_store(i)*T; %uJ
+        lhs_store(i) = max_avg/d; 
 
-    [G_Green_hold,sG_Green_hold]=calcG_multipleR(power_transmitted(i)*1e-6,lambda(i),d,25+273.15,25+273.15,10,diameter_store(i),std_transmitted*1e-6,0.05);
-    
-    G_Green(i) = sum(G_Green_hold); 
-    sG_Green(i) = sqrt(sum(sG_Green_hold.^2)); 
-    
-    sigma(i) = lhs_store(i)/G_Green(i); 
+        %Get the right hand side of the equation - the carrier density
+        if filters_store(i)==1
+            T = NDfilters('NE05A',lambda(i)); 
+        elseif filters_store(i)==2
+            T = NDfilters('NE06A',lambda(i)); 
+        elseif filters_store(i)==3
+            T = NDfilters('NE10A',lambda(i)); 
+        elseif filters_store(i)==4
+            T = NDfilters('NE13A',lambda(i)); 
+        elseif filters_store(i)==5
+            T1 = NDfilters('NE05A',lambda(i)); 
+            T2 = NDfilters('NE06A',lambda(i));
+            T = T1*T2;
+        elseif filters_store(i)==6
+            T1 = NDfilters('NE06A',lambda(i)); 
+            T2 = NDfilters('NE10A',lambda(i));
+            T = T1*T2;
+        elseif filters_store(i)==7
+            T1 = NDfilters('NE06A',lambda(i)); 
+            T2 = NDfilters('NE13A',lambda(i));
+            T = T1*T2;
+        elseif filters_store(i)==0
+            T=1;
+        else
+            disp('Did not succeed at finding transmission');
+        end
+
+        power_transmitted(i) = laserAvg_store(i)*T; %uJ
+        std_transmitted = laserStd_store(i)*T; %uJ
+
+        [G_Green_hold,sG_Green_hold]=calcG_multipleR(power_transmitted(i)*1e-6,lambda(i),d,25+273.15,25+273.15,10,diameter_store(i),std_transmitted*1e-6,0.05);
+
+        G_Green(i) = sum(G_Green_hold); 
+        sG_Green(i) = sqrt(sum(sG_Green_hold.^2)); 
+
+        sigma(i,j) = lhs_store(i)/G_Green(i); 
+    end
 
 end
 
 figure;
-plot(G_Green,sigma,'o','MarkerSize',8);
+plot(G_Green,sigma(:,5),'o','MarkerSize',8);
 xlabel('Carrier density [cm^-^3]','FontSize',20); 
 ylabel('\sigma at t = 0 [cm^2]','FontSize',20);
 title('FZ wafer with no passivation','FontSize',20); 
